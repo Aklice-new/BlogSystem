@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.springbootv2.dao.AttachsDao">
+<!--    待处理的表名-->
+    <sql id="BASE_TABLE">
+        t_attachs
+    </sql>
+    <!-- 用户表 -->
+    <sql id="TABLE_USER">
+        t_users
+    </sql>
+<!--    待查询的列-->
+    <sql id="BASE_COLUMN">
+        aa.id, aa.fname, aa.ftype, aa.fkey, aa.authorId, aa.created,
+    </sql>
+    <!-- 关联查询的用户表需要的字段 -->
+    <sql id="REL_USER_COLUMN">
+        u.username,
+    </sql>
+
+    <insert id="addAttAch"
+            parameterType="com.example.springbootv2.model.AttachMD"
+            useGeneratedKeys="true">
+        insert into
+        <include refid="BASE_TABLE"/>
+        (fname,ftype,fkey,authorId,created)
+        values (#{fname},#{ftype},#{fkey},#{authorId},#{created});
+    </insert>
+
+    <insert id="batchAddAttAch"
+            parameterType="com.example.springbootv2.model.AttachMD"
+            useGeneratedKeys="true">
+        insert into
+        <include refid="BASE_TABLE"/>
+        (fname,ftype,fkey,authorId,created)
+        values
+        <foreach collection="list" item="AttachMD" separator=",">
+            (
+            #{fname},#{ftype},#{fkey},#{authorId},#{create}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteAttAch" parameterType="int">
+        delete from
+        <include refid="BASE_TABLE"/>
+        where id = #{id};
+    </delete>
+
+    <select id="getAttAchById"
+            parameterType="int"
+            resultType="com.example.springbootv2.dto.AttAchDto">
+        select
+        <include refid="BASE_COLUMN"/>
+        <include refid="REL_USER_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/> AS aa
+        LEFT join <include refid="TABLE_USER"/> AS u
+        ON aa.authorId = u.uid
+        where aa.authorId = #{id}
+    </select>
+
+    <!-- 查找所有的附件 -->
+    <select id="getAtts"
+            resultType="com.example.springbootv2.dto.AttAchDto">
+        SELECT
+        <trim suffix="" suffixOverrides=",">
+            <include refid="BASE_COLUMN"/>
+            <include refid="REL_USER_COLUMN"/>
+        </trim>
+        FROM
+        <include refid="BASE_TABLE"/> AS aa
+        LEFT JOIN <include refid="TABLE_USER"/> AS u
+        ON aa.authorId = u.uid
+        ORDER BY aa.created DESC
+    </select>
+    <select id="getAttsCount" resultType="java.lang.Long">
+        select count(*) from
+        <include refid="BASE_TABLE"/>
+    </select>
+</mapper>

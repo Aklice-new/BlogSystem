@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootv2.dao.LogsDao">
+    <sql id="BASE_TABLE">
+        t_logs
+    </sql>
+    <sql id="BASE_COLUMN">
+        l.id, l.action, l.data, l.authorId, l.ip, l.created
+    </sql>
+<!--    add logs-->
+    <insert id="addLogMD" parameterType="com.example.springbootv2.model.LogMD">
+        insert into
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           action, data, authorId, ip, created
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            #{action},#{data},#{authorId},#{ip},#{created}
+        </trim>
+    </insert>
+<!--    delete log by id-->
+    <delete id="deleteLogMD" parameterType="int">
+        delete from
+        <include refid="BASE_TABLE"/>
+        where id = #{id}
+    </delete>
+<!--    get log list-->
+    <select id="getLogs" resultType="com.example.springbootv2.model.LogMD">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/> as l
+
+    </select>
+</mapper>

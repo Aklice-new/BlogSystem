@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    username: root
+    password: cao1016
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url:  jdbc:mysql://localhost:3306/ak_tale
+    druid:
+      stat-view-servlet:
+        loginUsername: admin
+        loginPassword: 12345
+        enabled: true
+      web-stat-filter:
+        enabled: true
+  main:
+    allow-circular-references: true
+mybatis:
+  mapper-locations: classpath:mapper/*.xml

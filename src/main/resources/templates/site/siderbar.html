@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Home | Triangle</title>
+  <link th:href="@{/site/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/site/css/font-awesome.min.css}" rel="stylesheet">
+  <link th:href="@{/site/css/animate.min.css}" rel="stylesheet">
+  <link th:href="@{/site/css/lightbox.css}" rel="stylesheet">
+  <link th:href="@{/site/css/main.css}" rel="stylesheet">
+  <link th:href="@{/site/css/responsive.css}" rel="stylesheet">
+
+  <!--[if lt IE 9]>
+  <script src="site/js/html5shiv.js"></script>
+  <script src="site/js/respond.min.js"></script>
+  <![endif]-->
+  <link rel="shortcut icon" href="images/ico/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" th:href="@{/site/images/ico/apple-touch-icon-144-precomposed.png}">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" th:href="@{/site/images/ico/apple-touch-icon-114-precomposed.png}">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" th:href="@{/site/images/ico/apple-touch-icon-72-precomposed.png}">
+  <link rel="apple-touch-icon-precomposed" th:href="@{/site/images/ico/apple-touch-icon-57-precomposed.png}">
+</head>
+<body>
+  <div th:fragment="sidebar">
+    <div class="sidebar blog-sidebar">
+      <div class="sidebar-item categories">
+        <h3>Categories</h3>
+        <ul class="nav navbar-stacked">
+          <th:block th:each="category : ${categories}">
+            <li><a href="#"><th:block th:text="${category.name}"></th:block>
+              <span class="pull-right"><th:block th:text="' ('+${category.count}+')'"/></span></a></li>
+          </th:block>
+        </ul>
+      </div>
+      <div class="sidebar-item tag-cloud">
+        <h3>Tag Cloud</h3>
+        <ul class="nav nav-pills">
+          <th:block th:each="tag : ${tags}">
+            <li><a href="#"><th:block th:text="${tag.name}"></th:block>
+              <th:block th:text="' ('+${tag.count}+')'"/></a></li>
+          </th:block>
+
+        </ul>
+      </div>
+      <div class="sidebar-item popular">
+        <h3>Latest Photos</h3>
+        <ul class="gallery">
+          <li><a href="#"><img src="/site/images/portfolio/popular1.jpg" alt=""></a></li>
+          <li><a href="#"><img src="/site/images/portfolio/popular2.jpg" alt=""></a></li>
+          <li><a href="#"><img src="/site/images/portfolio/popular3.jpg" alt=""></a></li>
+          <li><a href="#"><img src="/site/images/portfolio/popular4.jpg" alt=""></a></li>
+          <li><a href="#"><img src="/site/images/portfolio/popular5.jpg" alt=""></a></li>
+          <li><a href="#"><img src="/site/images/portfolio/popular1.jpg" alt=""></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootv2.dao.RelationshipsDao">
+    <sql id="BASE_TABLE">
+        t_relationships
+    </sql>
+<!--    addRelationShip-->
+    <insert id="addRelationShip" parameterType="com.example.springbootv2.model.RelationShipMD">
+        insert into
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            cid,mid,
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            #{cid,jdbcType=INTEGER},#{mid,jdbcType=INTEGER}
+        </trim>
+    </insert>
+<!--    deleteRelationShipById-->
+    <delete id="deleteRelationShipById">
+        delete from
+        <include refid="BASE_TABLE"/>
+        where cid = #{cid}
+        AND mdi = #{mid}
+    </delete>
+<!--    deleteRelationShipByCid-->
+    <delete id="deleteRelationShipByCid">
+        delete from
+        <include refid="BASE_TABLE"/>
+        where cid = #{cid}
+    </delete>
+<!--    deleteRelationShipByMid-->
+    <delete id="deleteRelationShipByMid">
+        delete from
+        <include refid="BASE_TABLE"/>
+        where mid = #{mid}
+    </delete>
+<!--    updateRelationShip-->
+    <update id="updateRelationShip" parameterType="com.example.springbootv2.model.RelationShipMD">
+        update
+        <include refid="BASE_TABLE"/>
+        <set>
+            mid = #{mid}
+        </set>
+        where cid = #{cid}
+    </update>
+<!--    getRelationShipByCid-->
+    <select id="getRelationShipByCid" resultType="com.example.springbootv2.model.RelationShipMD">
+        select * from
+        <include refid="BASE_TABLE"/>
+        where cid = #{cid}
+    </select>
+<!--    getRelationShipByMid-->
+    <select id="getRelationShipByMid" resultType="com.example.springbootv2.model.RelationShipMD">
+        select * from
+        <include refid="BASE_TABLE"/>
+        where mid = #{mid}
+    </select>
+<!--    getCountById-->
+    <select id="getCountById" resultType="java.lang.Long">
+        select count(*) from
+        <include refid="BASE_TABLE"/>
+        where cid=#{cid}
+        AND mid = #{mid}
+    </select>
+</mapper>

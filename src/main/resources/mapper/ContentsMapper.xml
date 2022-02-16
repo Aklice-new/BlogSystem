@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootv2.dao.ContentsDao">
+    <sql id="BASE_TABLE">
+        t_contents
+    </sql>
+<!--    添加新文章-->
+    <insert id="addArticle" parameterType="com.example.springbootv2.model.ContentMD" useGeneratedKeys="true" keyProperty="cid">
+        insert into
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            title, titlePic, slug, created, content, authorId,
+            type, status, tags, categories, hits, commentsNum, allowComment,
+            allowPing, allowFeed,
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{title}, #{titlePic}, #{slug}, UNIX_TIMESTAMP(NOW()), #{content}, #{authorId},
+            #{type}, #{status}, #{tags}, #{categories}, #{hits}, #{commentsNum}, #{allowComment},
+            #{allowPing}, #{allowFeed},
+        </trim>
+    </insert>
+<!--    删除文章-->
+   <delete id="deleteArticleById" parameterType="int">
+        delete from
+        <include refid="BASE_TABLE"/>
+        where cid = #{cid}
+   </delete>
+<!--    更新文章-->
+    <update id="updateArticle" >
+        update
+        <include refid="BASE_TABLE"/>
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="titlePic != null">
+                titlePic = #{titlePic, jdbcType=VARCHAR},
+            </if>
+            <if test="slug != null">
+                slug = #{slug, jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content, jdbcType=LONGVARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type, jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status, jdbcType=VARCHAR},
+            </if>
+            <if test="tags != null">
+                tags = #{tags, jdbcType=VARCHAR},
+            </if>
+            <if test="categories != null">
+                categories = #{categories, jdbcType=VARCHAR},
+            </if>
+            <if test="hits != null">
+                hits = #{hits, jdbcType=INTEGER},
+            </if>
+            <if test="commentsNum != null">
+                commentsNum = #{commentsNum, jdbcType=INTEGER},
+            </if>
+            <if test="allowComment != null">
+                allowComment = #{allowComment, jdbcType=INTEGER},
+            </if>
+            <if test="allowPing != null">
+                allowPing = #{allowPing, jdbcType=INTEGER},
+            </if>
+            <if test="allowFeed != null">
+                allowFeed = #{allowFeed, jdbcType=INTEGER},
+            </if>
+        </set>
+        where cid = #{cid}
+    </update>
+<!--   更新评论数 -->
+    <update id="updateArticleCommentCountById">
+        update
+        <include refid="BASE_TABLE"/>
+        set commentsNum = #{commentsNum}
+        where cid = #{cid}
+    </update>
+<!--    根据文章cid获取文章-->
+    <select id="getArticleById" resultType="com.example.springbootv2.model.ContentMD">
+        select * from
+        <include refid="BASE_TABLE"/>
+        where cid = #{cid}
+    </select>
+<!--    根据条件获取文章列表-->
+    <select id="getArticlesByCond" resultType="com.example.springbootv2.model.ContentMD">
+        select * from
+        <include refid="BASE_TABLE"/> AS c
+        <where>
+            <if test="tag != null">
+                AND c.tags LIKE CONCAT('%',#{tag, jdbcType=VARCHAR},'%')
+            </if>
+            <if test="category != null">
+                AND c.categories LIKE CONCAT('%',#{category, jdbcType=VARCHAR},'%')
+            </if>
+            <if test="status != null">
+                AND c.status = #{status, jdbcType=VARCHAR}
+            </if>
+            <if test="title != null">
+                AND c.title LIKE CONCAT('%',#{title, jdbcType=VARCHAR},'%')
+            </if>
+            <if test="content != null">
+                AND c.content LIKE CONCAT('%',#{content, jdbcType=VARCHAR},'%')
+            </if>
+            <if test="type != null">
+                AND c.type = #{type, jdbcType=VARCHAR}
+            </if>
+            <if test="startTime != null">
+                AND c.created &gt;= #{startTime, jdbcType=INTEGER}
+            </if>
+            <if test="endTime != null">
+                AND c.created &lt;= #{endTime, jdbcType=INTEGER}
+            </if>
+        </where>
+        ORDER BY c.created DESC
+    </select>
+<!--    获取数量-->
+    <select id="getArticleCount" resultType="java.lang.Long">
+        select count(*) from
+        <include refid="BASE_TABLE"/>
+    </select>
+<!--    归档查询，根据时间来判断-->
+    <select id="getArchive" resultType="com.example.springbootv2.model.ContentMD">
+        select
+        FROM_UNIXTIME(created, '%Y年%m月') as date,
+        count(*)                         as count
+        from <include refid="BASE_TABLE"/>
+        <where>
+            type = 'post'
+            and status = 'publish'
+            <if test="startTime != null">
+                AND created &gt;= #{startTime, jdbcType=INTEGER}
+            </if>
+            <if test="endTime != null">
+                AND created &lt;= #{endTime, jdbcType=INTEGER}
+            </if>
+        </where>
+        group by date
+        order by date desc
+    </select>
+<!--    获取最近的文章-->
+    <select id="getRecentlyArticle" resultType="com.example.springbootv2.model.ContentMD">
+        SELECT
+        cid, title
+        FROM
+        <include refid="BASE_TABLE"/>
+        ORDER BY created DESC
+    </select>
+<!--     模糊搜索 -->
+    <select id="searchArticle" resultType="com.example.springbootv2.model.ContentMD">
+        SELECT *
+        FROM
+        <include refid="BASE_TABLE"/> AS c
+        <where>
+            c.title LIKE CONCAT('%',#{param, jdbcType=VARCHAR},'%')
+            OR
+            c.content LIKE CONCAT('%',#{param, jdbcType=VARCHAR},'%')
+        </where>
+    </select>
+</mapper>

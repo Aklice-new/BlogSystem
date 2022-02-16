@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootv2.dao.OptionsDao">
+    <sql id="BASE_TABLE">
+        t_options
+    </sql>
+    <sql id="BASE_COLUMN">
+
+    </sql>
+
+<!--    deleteOptionByName-->
+    <delete id="deleteOptionByName" parameterType="java.lang.String">
+        delete from
+        <include refid="BASE_TABLE"/>
+        where name = #{name}
+    </delete>
+<!--    updateOptionByName-->
+    <update id="updateOptionByName" parameterType="com.example.springbootv2.model.OptionMD">
+        update
+        <include refid="BASE_TABLE"/>
+        <set>
+            <if test="value != null">
+                value = #{value}
+            </if>
+            <if test="description != null">
+                description = #{description}
+            </if>
+        </set>
+        where name = #{name,jdbcType=VARCHAR}
+    </update>
+<!--getOptionByName-->
+    <select id="getOptionByName" resultType="com.example.springbootv2.model.OptionMD">
+        select * from
+        <include refid="BASE_TABLE"/>
+        where name = #{name}
+    </select>
+<!--    getOptions-->
+    <select id="getOptions" resultType="com.example.springbootv2.model.OptionMD">
+        select * from
+        <include refid="BASE_TABLE"/>
+    </select>
+
+</mapper>

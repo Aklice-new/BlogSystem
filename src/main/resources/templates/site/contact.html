@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="active='about'">
+<div th:replace="site/header::head"></div><!--/head-->
+
+<body>
+
+    <div th:replace="site/header::navbar(${active})"></div>
+    <!--/#header-->    
+
+    <section id="page-breadcrumb">
+        <div class="vertical-center sun">
+             <div class="container">
+                <div class="row">
+                    <h1 class="title">ABOUT THIS BLOG SYSTEM.</h1>
+                </div>
+            </div>
+        </div>
+   </section>
+    <!--/#action-->
+
+    <section id="map-section">
+        <div class="container">
+            <div class="row">
+                <div class="main-slider">
+                    <div class="slide-text">
+                        <h1>欢迎访问Aklice的博客</h1>
+                        <p>该博客系统采用的是Spring-boot2.0 + mybaits + thymeleaf实现的前后端分离的个人博客系统</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> <!--/#map-section-->
+
+    <div th:replace="site/footer::footer"></div>
+    <!--/#footer-->
+
+
+    <script type="text/javascript" src="site/js/jquery.js"></script>
+    <script type="text/javascript" src="site/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="site/js/gmaps.js"></script>
+    <script type="text/javascript" src="site/js/wow.min.js"></script>
+    <script type="text/javascript" src="site/js/main.js"></script>
+</body>
+</html>

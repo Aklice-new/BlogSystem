@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="active='blog'">
+<div th:replace="site/header::head"></div>
+<body>
+    <div th:replace="site/header::navbar(${active})"></div>
+    <!--/#header-->
+
+    <section id="page-breadcrumb">
+        <div class="vertical-center sun">
+             <div class="container">
+                <div class="row">
+                    <div class="action">
+                        <div class="col-sm-12">
+                            <h1 class="title">Blog</h1>
+                            <p>Blog with right sidebar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </section>
+    <!--/#page-breadcrumb-->
+
+    <section id="blog" class="padding-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-sm-7">
+                    <div class="row">
+                        <div th:each="article : ${articles.list}">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="single-blog single-column">
+                                    <div class="post-thumb">
+                                        <a th:href="@{'/article/' + ${article.cid}}">
+                                            <img th:src="@{'/site/images/blog/' + ${commons.random(6, '.jpg')}}" class="img-responsive"/>
+                                        </a>
+                                        <div class="post-overlay">
+                                            <span class="uppercase">
+                                                <a th:href="@{'/article/' + ${article.cid}}" th:text="${article.cid}"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="post-content overflow">
+                                        <h2 class="post-title bold"><a th:href="@{${commons.site_url('/article/')} + ${article.cid}}" th:text="${article.slug}">这是一个标题</a></h2>
+                                        <h1 class="post-date" ><a th:href="@{${commons.site_url('/article/')} + ${article.cid}} " th:text="${article.title}"> nohere </a></h1>
+                                        <div class="post-bottom overflow">
+                                            <ul class="nav navbar-nav post-nav">
+                                                <li><i class="fa fa-heart"></i><a href="#" th:text="${article.hits} + 'hits'">0 Hits</a></li>
+                                                <li><i class="fa fa-comments"></i><a href="#" th:text="${article.commentsNum} + 'Comments'">0 Comments</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:replace="admin/macros :: pageAdminNav(${articles})"></div>
+                    </div>
+                 </div>
+<!--                sidebar-->
+                <div class="col-md-3 col-sm-5">
+                    <div class="sidebar blog-sidebar">
+                        <div class="sidebar-item  recent">
+                            <h3>Last Comments</h3>
+                            <div th:each="comment : ${comments.list}">
+                                <div class="media">
+                                        <div class="media-body">
+                                            <p th:text="${comment.author} + ${commons.fmtdate(comment.created)}"></p>
+                                        <h4 th:text="${comment.content}"></h4>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:replace="/site/siderbar::sidebar"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/#blog-->
+
+    <div th:replace="/site/footer::footer"></div>
+<!--    /footer-->
+
+    <script type="text/javascript" th:src="@{site/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{site/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{site/js/lightbox.min.js}"></script>
+    <script type="text/javascript" th:src="@{site/js/wow.min.js}"></script>
+    <script type="text/javascript" th:src="@{site/js/main.js}"></script>
+</body>
+</html>

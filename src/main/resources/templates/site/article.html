@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="active='article'">
+<div th:replace="site/header::head"></div>
+<body>
+    <div th:replace="site/header::navbar(${active})"></div>
+    <!--/#header-->
+
+
+    <section id="page-breadcrumb">
+        <div class="vertical-center sun">
+             <div class="container">
+                <div class="row">
+                    <div class="action">
+                        <div class="col-sm-12">
+                            <h1 class="title">Blog Details</h1>
+                            <p>Blog with right sidebar</p>
+                        </div>                                                                                
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/#page-breadcrumb-->
+
+    <section id="blog-details" class="padding-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-sm-7">
+                    <div class="single-blog blog-details two-column">
+                        <div class="post-thumb">
+                            <a href="#"><img th:src="@{'/site/images/blog/' + ${commons.random(6, '.jpg')}}" class="img-responsive" alt=""></a>
+                        </div>
+                        <div class="post-content overflow">
+                            <h1>Post by Aklice.</h1>
+                            <div id="post-Body">
+                                <p th:text="${commons.fmtdate(article.created)}"></p>
+                                <th:block th:utext="${commons.article(article.content)}"></th:block>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+                <div class="col-md-3 col-sm-5">
+                    <div th:replace="/site/siderbar::sidebar"/>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-sm-7">
+                <div class="response-area">
+                    <hr/>
+                    <h2 class="bold">Comments</h2>
+                    <ul class="media-list">
+                        <li class="media">
+                            <th:block th:if="${comments} != null">
+                                <div th:each="comment : ${comments.list}">
+                                    <div class="post-comment">
+                                        <div class="media-body">
+                                            <span><i class="fa fa-user"></i>Posted by <a th:text="${comment.author}">unknown</a></span>
+                                            <span><i class=""></i><a>回复</a></span>
+                                            <p th:text="${comment.content}"></p>
+                                            <ul class="nav navbar-nav post-nav">
+                                                <li><a href="#"><i class="fa fa-clock-o"></i><a th:text="${commons.fmtdate(comment.created)}"/> </a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="commentys-form">
+
+                    <h4>Leave a comment</h4>
+
+
+                    <div class="row">
+
+                        <form  id="comment-form" class="comment-form" role="form"
+                               onsubmit="return TaleComment.subComment();">
+
+                            <input type="hidden" name="coid" id="coid"/>
+                            <input type="hidden" name="cid" id="cid" th:value="${article.cid}"/>
+                            <input type="hidden" name="_csrf_token" th:value="${_csrf_token}"/>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+
+                                <input type="text" class="form-control" name="author" maxlength="12" id="author" placeholder="姓名 (*)"/>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+
+                                <input type="email" class="form-control" name="mail" id="mail" placeholder="邮箱 (*)"/>
+
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+
+                                <textarea name="text" class="form-control" id="textarea" placeholder="以上信息可以为空,评论不能为空哦!"
+                                          required="required" minlength="5"
+                                          maxlength="2000"></textarea>
+                            </div>
+
+                            <div class="text-center">
+
+                                <input type="submit" class="btn btn-submit" value="Post Comment" id="misubmit"/>
+
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div th:replace="/site/footer::footer"></div>
+    <!--/#blog-->
+    <div th:replace="site/tale_comment::tale_comment"></div>
+
+
+    <script type="text/javascript" th:src="@{/site/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/site/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/site/js/lightbox.min.js}"></script>
+    <script type="text/javascript" th:src="@{/site/js/wow.min.js}"></script>
+    <script type="text/javascript" th:src="@{/site/js/main.js}"></script>
+</body>
+</html>

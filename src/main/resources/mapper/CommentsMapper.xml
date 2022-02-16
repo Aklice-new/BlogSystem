@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootv2.dao.CommentsDao">
+    <sql id="BASE_TABLE">
+        t_comments
+    </sql>
+    <sql id="BASE_COLUMN">
+        coid,cid,created,author,authorId,ownerId,mail,url,ip,agent,content,type,status,parent
+    </sql>
+    <insert id="addComment" parameterType="com.example.springbootv2.model.CommentMD">
+        insert into
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            cid, created, author, authorId, ownerId, mail,
+            url, ip, agent, type, status, parent, content,
+        </trim>
+        VALUE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{cid},#{created},#{author},#{authorId},#{ownerId},#{mail},
+            #{url},#{ip},#{agent},#{type},#{status},#{parent},#{content},
+        </trim>
+    </insert>
+
+    <delete id="deleteComment" parameterType="int">
+        delete from
+        <include refid="BASE_TABLE"/>
+        where coid = #{coid};
+    </delete>
+    
+    <update id="updateComment">
+        update
+        <include refid="BASE_TABLE"/>
+        set status = #{status}
+        where coid = #{coid}
+    </update>
+
+    <select id="getCommentsById" resultType="com.example.springbootv2.model.CommentMD">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/> AS cm
+        where cm.cid = #{cid}
+        AND cm.status = 'approved'
+        ORDER BY cm.created;
+    </select>
+
+    <select id="getCommentById" resultType="com.example.springbootv2.model.CommentMD">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/> AS cm
+        WHERE cm.coid = #{coid, jdbcType=INTEGER}
+    </select>
+
+    <select id="getCommentsByCond"
+            parameterType="com.example.springbootv2.dto.cond.CommentCond"
+            resultType="com.example.springbootv2.model.CommentMD">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/> AS cm
+        <where>
+            <if test="cid != null">
+                AND cm.cid = #{cid}
+            </if>
+            <if test="status != null">
+                AND cm.status = #{status}
+            </if>
+            <if test="startTime != null">
+                AND cm.startTime = #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND cm.endTime = #{endTime}
+            </if>
+            <if test="parent != null">
+                AND cm.parent = #{parent}
+            </if>
+        </where>
+        ORDER BY cm.created
+    </select>
+    
+    <select id="getCommentsCount" resultType="java.lang.Long">
+        select count(*) from
+        <include refid="BASE_TABLE"/>
+    </select>
+    
+</mapper>
